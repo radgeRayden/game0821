@@ -1,6 +1,11 @@
 using import struct
+using import glm
+using import Map
+
 let window = (import .bottle.src.window)
 let wgpu = (import .bottle.src.FFI.wgpu)
+
+using import .spritebatch
 
 inline &local (T ...)
     &
@@ -113,6 +118,20 @@ fn... present (draw-fn : (pointer (function void wgpu.RenderPassEncoder)))
     wgpu.SwapChainPresent istate.swapchain
     ;
 
+global layers : (Map string SpriteBatch)
+
+fn new-layer (name atlas)
+    'set layers name (SpriteBatch atlas)
+
+fn get-layer (name)
+    try
+        'get layers name
+    else
+        assert false (.. "No layer named " (tostring name) " found.")
 do
-    let init present
+    let
+        init
+        present
+        new-layer
+        get-layer
     locals;
